@@ -8,15 +8,9 @@ import {
     TextInput,
     View,
 } from "react-native";
+import { Button } from "react-native-web";
 
 export default function App() {
-    const [inputHeight, setInputHeight] = useState("25%");
-    const [inputWidth, setInputWidth] = useState("25%");
-    // useEffect(() => {
-    //     const inputHeight = Math.max(25, input.length / 3).toString() + "%";
-    //     setInputHeight(inputHeight);
-    // }, [input]);
-
     const [input, setInput] = useState(null);
 
     const handleInputSubmit = () => {
@@ -27,22 +21,16 @@ export default function App() {
     return (
         <SafeAreaView style={styles.container}>
             <TextInput
-                style={[
-                    styles.input,
-                    { height: inputHeight, width: inputWidth },
-                ]}
+                style={styles.input}
                 editable
                 multiline
                 placeholder="Note..."
                 placeholderTextColor="pink"
-                value={input === 0 ? input : null}
+                value={input}
                 onChangeText={setInput}
                 onEndEditing={handleInputSubmit}
             />
-            <Pressable
-                style={{ padding: 10, backgroundColor: "red" }}
-                onPress={handleInputSubmit}
-            >
+            <Pressable style={styles.button} onPress={handleInputSubmit}>
                 <Text style={{ color: "white" }}>Submit</Text>
             </Pressable>
         </SafeAreaView>
@@ -58,11 +46,18 @@ const styles = StyleSheet.create({
     },
 
     input: {
+        width: "25%",
+        height: "25%",
         textAlign: "center",
         textAlignVertical: "top",
         paddingVertical: 30,
         paddingHorizontal: 20,
         color: "white",
         backgroundColor: "blue",
+    },
+
+    button: {
+        padding: 10,
+        backgroundColor: "red",
     },
 });
