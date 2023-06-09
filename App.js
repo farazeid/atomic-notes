@@ -16,19 +16,18 @@ const TodosContext = createContext({
 export default function App() {
     const [input, setInput] = useState(null);
 
-    const handleInputSubmit = () => {
-        console.log("Input:", input);
+    const handleInputSubmit = async () => {
         setInput("");
+        fetchTodos();
     };
 
-    const [todos, setTodos] = useState(0);
+    const [todos, setTodos] = useState("p");
     const fetchTodos = async () => {
-        const response = await fetch("http://localhost:8000/qwerty");
+        // console.assert(temp === "qwerty", "fetchTodos failed");
+        const response = await fetch("http://127.0.0.1:8000/qwerty");
         const temp = await response.json();
-        console.log(temp);
-        setTodos(temp.data);
-        console.log(temp.data);
-        console.log(todos);
+        setTodos(temp);
+        console.log(3);
     };
     useEffect(() => {
         fetchTodos();
@@ -50,16 +49,8 @@ export default function App() {
                 <Text style={{ color: "white" }}>Submit</Text>
             </Pressable>
             <View>
-                <Text>a {todos}</Text>
+                <Text>{todos}</Text>
             </View>
-            <TodosContext.Provider value={{ todos, fetchTodos }}>
-                {/* <Stack spacing={5}>
-                    {todos.map((todo) => (
-                        <b>{todo.item}</b>
-                    ))}
-                </Stack> */}
-                b {todos}
-            </TodosContext.Provider>
         </SafeAreaView>
     );
 }
