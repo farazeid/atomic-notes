@@ -2,10 +2,12 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+array = ["note1", "note2", "note3"]
 
-@app.get("/")
+
+@app.get("/qwerty")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": array}
 
 
 @app.post("/create-note/{note}")
