@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
     Pressable,
     SafeAreaView,
@@ -8,7 +7,11 @@ import {
     TextInput,
     View,
 } from "react-native";
-import { Button } from "react-native-web";
+
+const TodosContext = createContext({
+    todos: [],
+    fetchTodos: () => {},
+});
 
 export default function App() {
     const [input, setInput] = useState(null);
@@ -17,6 +20,19 @@ export default function App() {
         console.log("Input:", input);
         setInput("");
     };
+
+    const [todos, setTodos] = useState(0);
+    const fetchTodos = async () => {
+        const response = await fetch("http://localhost:8000/qwerty");
+        const temp = await response.json();
+        console.log(temp);
+        setTodos(temp.data);
+        console.log(temp.data);
+        console.log(todos);
+    };
+    useEffect(() => {
+        fetchTodos();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -33,6 +49,17 @@ export default function App() {
             <Pressable style={styles.button} onPress={handleInputSubmit}>
                 <Text style={{ color: "white" }}>Submit</Text>
             </Pressable>
+            <View>
+                <Text>a {todos}</Text>
+            </View>
+            <TodosContext.Provider value={{ todos, fetchTodos }}>
+                {/* <Stack spacing={5}>
+                    {todos.map((todo) => (
+                        <b>{todo.item}</b>
+                    ))}
+                </Stack> */}
+                b {todos}
+            </TodosContext.Provider>
         </SafeAreaView>
     );
 }
