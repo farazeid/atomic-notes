@@ -10,6 +10,7 @@ app.add_middleware(
         # "http://localhost",
         # "http://localhost:19006",
     ],
+    # allow_origin_regex=[], // e.g. "https://.*\.example\.org"
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
