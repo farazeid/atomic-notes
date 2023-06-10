@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import uuid
 
 app = FastAPI()
 
@@ -17,22 +19,36 @@ app.add_middleware(
 )
 
 
-array = ["note1", "note2", "note3"]
+note_all = []
 
 
 @app.get("/")
-def read_root():
+async def read_root() -> None:
     print("/")
-    return {"Hello": "World"}
+
+    return
 
 
-@app.get("/qwerty")
-def read_root():
-    print("/qwerty")
-    return {"q": array}
+@app.get("/get-note-all")
+async def get_note_all() -> dict:
+    print(f"/get-note-all, {len(note_all)}")
+
+    return {"note_all": note_all}
 
 
-@app.post("/create-note/{note}")
-def create_note(note: str):
-    print(f"/create-note/{note}")
-    return {"note": note}
+class NoteCreate(BaseModel):
+    note: str
+
+
+@app.post("/post-note")
+async def create_note(note: NoteCreate) -> dict:
+    print(f"/post-note, {note.note}")
+
+    # num_notes += 1
+    note_all.append(
+        {
+            "id": uuid.uuid4(),
+            "note": note.note,
+        }
+    )
+    return {"message": "success"}

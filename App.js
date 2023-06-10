@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import {
+    FlatList,
     Pressable,
     SafeAreaView,
     StyleSheet,
@@ -9,21 +10,39 @@ import {
 } from "react-native";
 
 export default function App() {
-    const [input, setInput] = useState(null);
+    const [input, setInput] = useState("");
 
-    const handleInputSubmit = async () => {
-        setInput("");
-    };
-
-    const [todos, setTodos] = useState("p");
-    const fetchTodos = async () => {
-        const response = await fetch("http://127.0.0.1:8000/qwerty");
-        const temp = await response.json();
-        setTodos(temp.q);
+    const [noteAll, setNoteAll] = useState("not-connected");
+    const printNoteAll = async () => {
+        const response = await fetch("http://localhost:8000/get-note-all");
+        const obj = await response.json();
+        setNoteAll(obj.note_all);
+        console.log(noteAll);
     };
     useEffect(() => {
-        fetchTodos();
+        printNoteAll();
     }, []);
+
+    const createNote = async () => {
+        await fetch("http://localhost:8000/post-note", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ note: input }),
+        });
+    };
+    const handleInputSubmit = async () => {
+        if (input === "") return;
+
+        createNote();
+        setInput("");
+        printNoteAll();
+    };
+
+    const Item = ({ note }) => (
+        <View>
+            <Text>{note}</Text>
+        </View>
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -41,7 +60,11 @@ export default function App() {
                 <Text style={{ color: "white" }}>Submit</Text>
             </Pressable>
             <View>
-                <Text>{todos}</Text>
+                <FlatList
+                    data={noteAll}
+                    renderItem={({ item }) => <Item note={item.note} />}
+                    keyExtractor={(item) => item.id}
+                />
             </View>
         </SafeAreaView>
     );
