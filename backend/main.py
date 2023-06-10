@@ -21,16 +21,17 @@ array = ["note1", "note2", "note3"]
 
 @app.get("/")
 def read_root():
-    print("Hello World")
+    print("/")
     return {"Hello": "World"}
 
 
 @app.get("/qwerty")
 def read_root():
-    print("Hello", "array")
+    print("/qwerty")
     return {"q": array}
 
 
 @app.post("/create-note/{note}")
 def create_note(note: str):
+    print(f"/create-note/{note}")
     return {"note": note}
