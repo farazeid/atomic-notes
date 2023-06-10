@@ -8,26 +8,18 @@ import {
     View,
 } from "react-native";
 
-const TodosContext = createContext({
-    todos: [],
-    fetchTodos: () => {},
-});
-
 export default function App() {
     const [input, setInput] = useState(null);
 
     const handleInputSubmit = async () => {
         setInput("");
-        fetchTodos();
     };
 
     const [todos, setTodos] = useState("p");
     const fetchTodos = async () => {
-        // console.assert(temp === "qwerty", "fetchTodos failed");
         const response = await fetch("http://127.0.0.1:8000/qwerty");
         const temp = await response.json();
-        setTodos(temp);
-        console.log(3);
+        setTodos(temp.q);
     };
     useEffect(() => {
         fetchTodos();
