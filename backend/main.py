@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 from pydantic import BaseModel
+
+from contextlib import asynccontextmanager
 import numpy as np
 import os
-from fastapi.encoders import jsonable_encoder
+
 import uuid
 
 
@@ -16,10 +17,14 @@ async def lifespan(app: FastAPI):
         note_all = np.array([])
     else:
         note_all = np.load(file_path, allow_pickle=True)
-    print(f"startup, {note_all}")
+
+    print(f"startup, {len(note_all)} note(s)")
+
     yield
+
     np.save("db.npy", note_all)
-    print(f"shutdown, {note_all}")
+
+    print(f"shutdown, {len(note_all)} note(s)")
 
 
 app = FastAPI(lifespan=lifespan)
@@ -38,17 +43,9 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def read_root() -> None:
-    print("/", note_all)
-
-    return
-
-
 @app.get("/get-note-all")
 async def get_note_all() -> dict:
-    # print(f"/get-note-all, {len(note_all)}")
-    print(f"/get-note-all, {note_all}")
+    print(f"/get-note-all, {len(note_all)} note(s)")
 
     return {"note_all": note_all.tolist()}
 
