@@ -20,3 +20,4 @@ web-build/
 .venv
 venv/
 __pycache__/
+db.npy
