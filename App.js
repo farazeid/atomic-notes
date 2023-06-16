@@ -33,7 +33,7 @@ export default function App() {
     const handleInputSubmit = async () => {
         if (input === "") return;
 
-        createNote();
+        await createNote();
         setInput("");
         printNoteAll();
     };
