@@ -24,7 +24,7 @@ export default function App() {
     }, []);
 
     const createNote = async () => {
-        await fetch("http://localhost:8000/post-note", {
+        const response = await fetch("http://localhost:8000/post-note", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ note: input }),
@@ -33,7 +33,7 @@ export default function App() {
     const handleInputSubmit = async () => {
         if (input === "") return;
 
-        await createNote();
+        createNote();
         setInput("");
         printNoteAll();
     };
