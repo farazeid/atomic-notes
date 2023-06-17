@@ -13,7 +13,7 @@ import uuid
 async def lifespan(app: FastAPI):
     global note_all
     file_path = "db.npy"
-    if os.path.getsize(file_path) == 0:
+    if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
         note_all = np.array([])
     else:
         note_all = np.load(file_path, allow_pickle=True)
